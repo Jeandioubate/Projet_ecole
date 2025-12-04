@@ -37,7 +37,7 @@ class Dao[T](ABC):
     @abstractmethod
     def read_all(self) -> List[T]:
         """Retourne tous les objets"""
-        return []
+        ...
 
 
     @abstractmethod
