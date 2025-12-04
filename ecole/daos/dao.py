@@ -29,15 +29,16 @@ class Dao[T](ABC):
         ...
 
     @abstractmethod
-    def read_all(self) -> List[T]:
-        """Retourne tous les objets"""
-        
-
-    @abstractmethod
     def read(self, id_entity: int) -> Optional[T]:
         """Renvoit l'objet correspondant à l'entité dont l'id est id_entity
            (ou None s'il n'a pu être trouvé)"""
         ...
+
+    @abstractmethod
+    def read_all(self) -> List[T]:
+        """Retourne tous les objets"""
+        return []
+
 
     @abstractmethod
     def update(self, obj: T) -> bool:
