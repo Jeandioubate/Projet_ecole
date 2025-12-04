@@ -6,7 +6,7 @@ Classe abstraite générique Dao[T], dont hérite les classes de DAO de chaque e
 
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
-from typing import ClassVar, Optional
+from typing import ClassVar, Optional, List
 import pymysql.cursors
 
 
@@ -15,7 +15,7 @@ class Dao[T](ABC):
     connection: ClassVar[pymysql.Connection] = \
         pymysql.connect(host='localhost',
                         user='ecole',
-                        password='FqDEuKWd9TxLERZg6ooh',
+                        password='Monprojetestpython',
                         database='ecole',
                         cursorclass=pymysql.cursors.DictCursor)
 
@@ -27,6 +27,11 @@ class Dao[T](ABC):
         :return: l'id de l'entité insérée en BD (0 si la création a échoué)
         """
         ...
+
+    @abstractmethod
+    def read_all(self) -> List[T]:
+        """Retourne tous les objets"""
+        
 
     @abstractmethod
     def read(self, id_entity: int) -> Optional[T]:
