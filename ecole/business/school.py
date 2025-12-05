@@ -1,60 +1,71 @@
+# school.py
 # -*- coding: utf-8 -*-
 
-"""
-Classe School
-"""
-
-from dataclasses import dataclass, field
-from datetime import date
-
 from daos.course_dao import CourseDao
-from models.address import Address
-from models.course import Course
-from models.teacher import Teacher
-from models.student import Student
+from daos.teacher_dao import TeacherDao
+from daos.student_dao import StudentDao
+from daos.address_dao import AddressDao
 
-
-@dataclass
 class School:
-    """Couche métier de l'application de gestion d'une école,
-    reprenant les cas d'utilisation et les spécifications fonctionnelles :
-    - courses : liste des cours existants
-    - teachers : liste des enseignants
-    - students : liste des élèves"""
+    def __init__(self):
+        # Créer les DAOs
+        self.address_dao = AddressDao()
+        self.student_dao = StudentDao()
+        self.teacher_dao = TeacherDao()
+        self.course_dao = CourseDao()
 
-    courses: list[Course] = field(default_factory=list, init=False)
-    teachers: list[Teacher] = field(default_factory=list, init=False)
-    students: list[Student] = field(default_factory=list, init=False)
+        # Charger toutes les données
+        self.addresses = self.address_dao.read_all()
+        self.students = self.student_dao.read_all()
+        self.teachers = self.teacher_dao.read_all()
+        self.courses = self.course_dao.read_all()
 
-    def add_course(self, course: Course) -> None:
-        """Ajout du cours course à la liste des cours."""
-        self.courses.append(course)
+    def display_all_data(self):
+        """Affiche toutes les données de l'école"""
+        print("=" * 50)
+        print("ADDRESSES:")
+        print("=" * 50)
+        for addr in self.addresses:
+            print(f"ID: {addr.id}, {addr}")
 
-    def add_teacher(self, teacher: Teacher) -> None:
-        """Ajout de l'enseignant teacher à la liste des enseignants."""
-        self.teachers.append(teacher)
+        print("\n" + "=" * 50)
+        print("STUDENTS:")
+        print("=" * 50)
+        for student in self.students:
+            print(f"N°{student.student_nbr}: {student}")
 
-    def add_student(self, student: Student) -> None:
-        """Ajout de l'élève spécifié à la liste des élèves."""
-        self.students.append(student)
+        print("\n" + "=" * 50)
+        print("TEACHERS:")
+        print("=" * 50)
+        for teacher in self.teachers:
+            print(f"ID{teacher.id}: {teacher}")
 
-    def display_courses_list(self) -> None:
-        """Affichage de la liste des cours avec pour chacun d'eux :
-        - leur enseignant
-        - la liste des élèves le suivant"""
+        print("\n" + "=" * 50)
+        print("COURSES:")
+        print("=" * 50)
         for course in self.courses:
-            print(f"cours de {course}")
-            for student in course.students_taking_it:
-                print(f"- {student}")
-            print()
+            print(f"\n{course.name} (ID: {course.id})")
+            print(f"Du {course.start_date} au {course.end_date}")
+            if course.teacher:
+                print(f"Enseignant: {course.teacher.first_name} {course.teacher.last_name}")
+            if course.students_taking_it:
+                print("Étudiants inscrits:")
+                for student in course.students_taking_it:
+                    print(f"  - {student.first_name} {student.last_name} (N°{student.student_nbr})")
 
-    @staticmethod
-    def get_course_by_id(id_course: int):
-        course_dao: CourseDao = CourseDao()
-        return course_dao.read(id_course)
+    def display_stats(self):
+        """Affiche les statistiques"""
+        print("\n" + "=" * 50)
+        print("STATISTIQUES DE L'ÉCOLE")
+        print("=" * 50)
+        print(f"Nombre d'adresses: {len(self.addresses)}")
+        print(f"Nombre d'étudiants: {len(self.students)}")
+        print(f"Nombre d'enseignants: {len(self.teachers)}")
+        print(f"Nombre de cours: {len(self.courses)}")
 
+    """
     def init_static(self) -> None:
-        """Initialisation d'un jeu de test pour l'école."""
+        #Initialisation d'un jeu de test pour l'école.
         
         # création des étudiants et rattachement à leur adresse
         paul: Student    = Student('Paul', 'Dubois', 12)
@@ -128,3 +139,4 @@ class School:
         william.add_course(anglais)
 
         michel.add_course(sport)
+    """

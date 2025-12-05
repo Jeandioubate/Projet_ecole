@@ -2,31 +2,31 @@
 # -*- coding: utf-8 -*-
 
 """
-Application de gestion d'une école
+Application de gestion d'une école - Version simplifiée
+Chargement et affichage uniquement
 """
+# initialisation d'un ensemble de cours, enseignants et élèves composant l'école
+# school.init_static()
 
 from business.school import School
 
+def main():
+    print("ÉCOLE - CHARGEMENT DES DONNÉES")
+    print("=" * 50)
 
-def main() -> None:
-    """Programme principal."""
-    print("""\
---------------------------
-Bienvenue dans notre école
---------------------------""")
+    # Créer l'école (charge automatiquement toutes les données)
+    school = School()
 
-    school: School = School()
+    # Afficher les statistiques
+    school.display_stats()
 
-    # initialisation d'un ensemble de cours, enseignants et élèves composant l'école
-    school.init_static()
-
-    # affichage de la liste des cours, leur enseignant et leurs élèves
-    school.display_courses_list()
-
-    print(school.get_course_by_id(1))
-    print(school.get_course_by_id(2))
-    print(school.get_course_by_id(9))
-
+    # Afficher toutes les données
+    school.display_all_data()
 
 if __name__ == '__main__':
     main()
+
+
+
+
+
